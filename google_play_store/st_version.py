@@ -85,7 +85,7 @@ st.markdown('Load in the data:')
 st.code("""apps = pd.read_csv('../google_play_store/input/google-playstore-apps/Google-Playstore.csv')
 apps.head()""")
 
-apps = pd.read_csv('../../data/Google-Playstore.csv')
+apps = pd.read_csv('.../google_play_store/input/google-playstore-apps/Google-Playstore.csv')
 
 st.dataframe(apps.head())
 
