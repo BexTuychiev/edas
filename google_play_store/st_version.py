@@ -134,7 +134,6 @@ st.markdown("""
 There are 23 columns and several of them have missing values. I like creating a single cell to list all the issues that need addressing and deal with them separately after I am done exploring. Then, I can cross each issue one by one as I fix them.
 """)
 
-
 st.markdown("""
 I like the columns of my dataset to have *snake_case* because it will be easier to choose them later on (added to the list).
 
@@ -184,7 +183,6 @@ Some columns have incorrect data types: Released, Size. Released should be a `da
 
 Now, let's look at the app categories:
 """)
-
 
 st.code("""print(apps['Category'].value_counts())""")
 
@@ -348,13 +346,17 @@ st.code("""
     apps.drop(to_drop, axis='columns', inplace=True)
 """)
 
-
 st.markdown("""Check:""")
 
 st.code("""assert apps.columns.all() not in to_drop""")
 
-
 st.markdown("""### Collapse multiple categories into one""")
+
+# Collapse 'Music' and 'Music & Audio' into 'Music'
+apps['category'] = apps['category'].str.replace('Music & Audio', 'Music')
+
+# Collapse 'Educational' and 'Education' into 'Education'
+apps['category'] = apps['category'].str.replace('Educational', 'Education')
 
 st.code("""    # Collapse 'Music' and 'Music & Audio' into 'Music'
     apps['category'] = apps['category'].str.replace('Music & Audio', 'Music')
@@ -362,17 +364,11 @@ st.code("""    # Collapse 'Music' and 'Music & Audio' into 'Music'
     # Collapse 'Educational' and 'Education' into 'Education'
     apps['category'] = apps['category'].str.replace('Educational', 'Education')
 """)
-# Collapse 'Music' and 'Music & Audio' into 'Music'
-apps['category'] = apps['category'].str.replace('Music & Audio', 'Music')
-
-# Collapse 'Educational' and 'Education' into 'Education'
-apps['category'] = apps['category'].str.replace('Educational', 'Education')
 
 st.markdown("""Check:""")
 
 st.code("""assert 'Educational' not in apps['category'] and \
            'Music & Audio' not in apps['category']""")
-
 
 st.markdown("""### Subset only for top 8 categories""")
 
@@ -423,7 +419,6 @@ st.code("""    # Strip of all text and convert to numeric
 st.markdown("""Check:""")
 
 st.code("""assert top['size'].dtype == 'float64'""")
-
 
 st.markdown("""No output means passed!""")
 
