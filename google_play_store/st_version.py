@@ -345,7 +345,7 @@ to_drop = [
 ]
 
 # Drop them
-apps.drop(to_drop, axis='columns', inplace=True)
+# apps.drop(to_drop, axis='columns', inplace=True)
 
 st.markdown("""Check:""")
 
