@@ -185,8 +185,8 @@ Some columns have incorrect data types: Released, Size. Released should be a `da
 Now, let's look at the app categories:
 """)
 
-with st.echo():
-    print(apps['Category'].value_counts())
+# with st.echo():
+#     print(apps['Category'].value_counts())
 
 st.code("""Education                  115242
 Music & Audio              104541
