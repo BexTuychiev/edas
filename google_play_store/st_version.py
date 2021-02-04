@@ -185,8 +185,8 @@ Some columns have incorrect data types: Released, Size. Released should be a `da
 Now, let's look at the app categories:
 """)
 
-# with st.echo():
-#     print(apps['Category'].value_counts())
+
+st.code("""print(apps['Category'].value_counts())""")
 
 st.code("""Education                  115242
 Music & Audio              104541
@@ -245,10 +245,11 @@ Later, we will subset for the top 8 columns after finishing cleaning.
 
 Now, let's explore the numerical features of the dataset and see if they contain any issues:""")
 
-with st.echo():
+st.code("""
     # Display in normal notation instead of scientific
     with pd.option_context('float_format', '{:f}'.format):
         print(apps.describe())
+""")
 
 st.code("""
               Rating     Rating Count   Minimum Installs   Maximum Installs  
@@ -297,16 +298,19 @@ st.markdown("""
 ### Convert all columns to snake case
 """)
 
-with st.echo():
-    apps.rename(lambda x: x.lower().strip().replace(' ', '_'),
-                axis='columns', inplace=True)
+st.code("""
+apps.rename(lambda x: x.lower().strip().replace(' ', '_'),
+            axis='columns', inplace=True)
+""")
+
+apps.rename(lambda x: x.lower().strip().replace(' ', '_'),
+            axis='columns', inplace=True)
 
 st.markdown("""
 Check the results:
 """)
 
-with st.echo():
-    print(apps.columns)
+st.code("""print(apps.columns)""")
 
 st.code("""
 Index(['app_name', 'app_id', 'category', 'rating', 'rating_count', 'installs',
@@ -321,7 +325,7 @@ st.markdown("""
 ### Drop unnecessary columns
 """)
 
-with st.echo():
+st.code("""
     # Specify the cols to drop
     to_drop = [
         'app_id', 'minimum_android',
@@ -331,68 +335,93 @@ with st.echo():
 
     # Drop them
     apps.drop(to_drop, axis='columns', inplace=True)
+""")
+
+# Specify the cols to drop
+to_drop = [
+    'app_id', 'minimum_android',
+    'developer_id', 'developer_website', 'developer_email', 'privacy_policy',
+    'ad_supported', 'in_app_purchases', 'editors_choice'
+]
+
+# Drop them
+apps.drop(to_drop, axis='columns', inplace=True)
 
 st.markdown("""Check:""")
 
-with st.echo():
-    assert apps.columns.all() not in to_drop
+st.code("""assert apps.columns.all() not in to_drop""")
+
 
 st.markdown("""### Collapse multiple categories into one""")
 
-with st.echo():
-    # Collapse 'Music' and 'Music & Audio' into 'Music'
+st.code("""    # Collapse 'Music' and 'Music & Audio' into 'Music'
     apps['category'] = apps['category'].str.replace('Music & Audio', 'Music')
 
     # Collapse 'Educational' and 'Education' into 'Education'
     apps['category'] = apps['category'].str.replace('Educational', 'Education')
+""")
+# Collapse 'Music' and 'Music & Audio' into 'Music'
+apps['category'] = apps['category'].str.replace('Music & Audio', 'Music')
+
+# Collapse 'Educational' and 'Education' into 'Education'
+apps['category'] = apps['category'].str.replace('Educational', 'Education')
 
 st.markdown("""Check:""")
 
-with st.echo():
-    assert 'Educational' not in apps['category'] and \
-           'Music & Audio' not in apps['category']
+st.code("""assert 'Educational' not in apps['category'] and \
+           'Music & Audio' not in apps['category']""")
+
 
 st.markdown("""### Subset only for top 8 categories""")
 
-with st.echo():
-    top_8_list = [
+st.code("""    top_8_list = [
         'Education', 'Music', 'Business', 'Tools',
         'Entertainment', 'Lifestyle', 'Food & Drink',
         'Books & Reference'
     ]
 
     top = apps[apps['category'].isin(top_8_list)].reset_index(drop=True)
+""")
+
+top_8_list = [
+    'Education', 'Music', 'Business', 'Tools',
+    'Entertainment', 'Lifestyle', 'Food & Drink',
+    'Books & Reference'
+]
+
+top = apps[apps['category'].isin(top_8_list)].reset_index(drop=True)
 
 st.markdown("""Check:""")
 
-with st.echo():
-    assert top['category'].all() in top_8_list
+st.code("""assert top['category'].all() in top_8_list""")
 
 st.markdown("""### Convert `released` to `datetime`""")
 
-with st.echo():
-    # Specifying the datetime format significantly reduces conversion time
+st.code("""    # Specifying the datetime format significantly reduces conversion time
     top['released'] = pd.to_datetime(top['released'], format='%b %d, %Y',
                                      infer_datetime_format=True, errors='coerce')
+""")
+# Specifying the datetime format significantly reduces conversion time
+top['released'] = pd.to_datetime(top['released'], format='%b %d, %Y',
+                                 infer_datetime_format=True, errors='coerce')
 
 st.markdown("""Check:""")
 
-with st.echo():
-    print(top.released.dtype)
+st.code("""print(top.released.dtype)""")
 
 st.code("""dtype('<M8[ns]')""")
 
 st.markdown("""### Convert `size` to float""")
 
-with st.echo():
-    # Strip of all text and convert to numeric
+st.code("""    # Strip of all text and convert to numeric
     top['size'] = pd.to_numeric(top['size'].str.replace(r'[a-zA-Z]+', ''),
                                 errors='coerce')
+""")
 
 st.markdown("""Check:""")
 
-with st.echo():
-    assert top['size'].dtype == 'float64'
+st.code("""assert top['size'].dtype == 'float64'""")
+
 
 st.markdown("""No output means passed!""")
 
