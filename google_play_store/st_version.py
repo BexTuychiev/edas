@@ -4,11 +4,8 @@ from PIL import Image
 st.markdown("""# My 5-part Powerful EDA Template That Speaks of Ultimate Skill
 ## It is hard to stand out guys...""")
 
-image = Image.open('./images/texture.jpg')
-
-st.image(image, use_column_width=True)
-
 st.markdown("""
+<img src='https://cdn-images-1.medium.com/max/1200/1*JwZ7l0LNnIVP9bPNjI8KZQ.jpeg' width=800></img>
 <figcaption style="text-align: center;">
     <strong>
         Photo by 
