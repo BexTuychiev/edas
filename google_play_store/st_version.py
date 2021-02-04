@@ -82,7 +82,7 @@ with st.echo():
 
 st.markdown('Load in the data:')
 
-st.code("""apps = pd.read_csv('../input/google-playstore-apps/Google-Playstore.csv')
+st.code("""apps = pd.read_csv('../google_play_store/input/google-playstore-apps/Google-Playstore.csv')
 apps.head()""")
 
 apps = pd.read_csv('../../data/Google-Playstore.csv')
