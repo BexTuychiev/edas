@@ -79,13 +79,46 @@ with st.echo():
 
     # Seed value for numpy.random
     np.random.seed(42)
+apps = pd.read_csv('google_play_store/data/Google-Playstore.csv')
+with st.echo():
+    apps.info()
+with st.echo():
+    print(apps.info())
+apps.rename(lambda x: x.lower().strip().replace(' ', '_'),
+            axis='columns', inplace=True)
+
+# Specify the cols to drop
+to_drop = [
+    'app_id', 'minimum_android',
+    'developer_id', 'developer_website', 'developer_email', 'privacy_policy',
+    'ad_supported', 'in_app_purchases', 'editors_choice'
+]
+
+# Drop them
+apps.drop(to_drop, axis='columns', inplace=True)
+
+# Collapse 'Music' and 'Music & Audio' into 'Music'
+apps['category'] = apps['category'].str.replace('Music & Audio', 'Music')
+
+# Collapse 'Educational' and 'Education' into 'Education'
+apps['category'] = apps['category'].str.replace('Educational', 'Education')
+
+top_8_list = [
+    'Education', 'Music', 'Business', 'Tools',
+    'Entertainment', 'Lifestyle', 'Food & Drink',
+    'Books & Reference'
+]
+
+top = apps[apps['category'].isin(top_8_list)].reset_index(drop=True)
+
+# Specifying the datetime format significantly reduces conversion time
+top['released'] = pd.to_datetime(top['released'], format='%b %d, %Y',
+                                 infer_datetime_format=True, errors='coerce')
 
 st.markdown('Load in the data:')
 
 st.code("""apps = pd.read_csv('../google_play_store/input/google-playstore-apps/Google-Playstore.csv')
 apps.head()""")
-
-apps = pd.read_csv('google_play_store/data/Google-Playstore.csv')
 
 st.dataframe(apps.head())
 
@@ -94,9 +127,6 @@ st.markdown("""
 ## 2.1 Basic Exploration
 We will start with basic exploration of the dataset and get a feel for how it looks.
 """)
-
-with st.echo():
-    apps.info()
 
 st.code("""
 <class 'pandas.core.frame.DataFrame'>
@@ -141,9 +171,6 @@ Also, I think these columns will not be useful for us: App ID, minimum and maxim
 
 Next, looking at the dataset info again:
 """)
-
-with st.echo():
-    print(apps.info())
 
 st.code("""
 <class 'pandas.core.frame.DataFrame'>
@@ -301,14 +328,10 @@ apps.rename(lambda x: x.lower().strip().replace(' ', '_'),
             axis='columns', inplace=True)
 """)
 
-apps.rename(lambda x: x.lower().strip().replace(' ', '_'),
-            axis='columns', inplace=True)
-
 st.markdown("""
 Check the results:
 """)
-with st.echo():
-    print(apps.columns)
+
 st.code("""print(apps.columns)""")
 
 st.code("""
@@ -323,16 +346,6 @@ Index(['app_name', 'app_id', 'category', 'rating', 'rating_count', 'installs',
 st.markdown("""
 ### Drop unnecessary columns
 """)
-
-# Specify the cols to drop
-to_drop = [
-    'app_id', 'minimum_android',
-    'developer_id', 'developer_website', 'developer_email', 'privacy_policy',
-    'ad_supported', 'in_app_purchases', 'editors_choice'
-]
-
-# Drop them
-apps.drop(to_drop, axis='columns', inplace=True)
 
 st.code("""
     # Specify the cols to drop
@@ -351,12 +364,6 @@ st.markdown("""Check:""")
 st.code("""assert apps.columns.all() not in to_drop""")
 
 st.markdown("""### Collapse multiple categories into one""")
-
-# Collapse 'Music' and 'Music & Audio' into 'Music'
-apps['category'] = apps['category'].str.replace('Music & Audio', 'Music')
-
-# Collapse 'Educational' and 'Education' into 'Education'
-apps['category'] = apps['category'].str.replace('Educational', 'Education')
 
 st.code("""    # Collapse 'Music' and 'Music & Audio' into 'Music'
     apps['category'] = apps['category'].str.replace('Music & Audio', 'Music')
@@ -381,13 +388,6 @@ st.code("""    top_8_list = [
     top = apps[apps['category'].isin(top_8_list)].reset_index(drop=True)
 """)
 
-top_8_list = [
-    'Education', 'Music', 'Business', 'Tools',
-    'Entertainment', 'Lifestyle', 'Food & Drink',
-    'Books & Reference'
-]
-
-top = apps[apps['category'].isin(top_8_list)].reset_index(drop=True)
 
 st.markdown("""Check:""")
 
@@ -399,9 +399,6 @@ st.code("""    # Specifying the datetime format significantly reduces conversion
     top['released'] = pd.to_datetime(top['released'], format='%b %d, %Y',
                                      infer_datetime_format=True, errors='coerce')
 """)
-# Specifying the datetime format significantly reduces conversion time
-top['released'] = pd.to_datetime(top['released'], format='%b %d, %Y',
-                                 infer_datetime_format=True, errors='coerce')
 
 st.markdown("""Check:""")
 
