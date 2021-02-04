@@ -309,7 +309,8 @@ apps.rename(lambda x: x.lower().strip().replace(' ', '_'),
 st.markdown("""
 Check the results:
 """)
-
+with st.echo():
+    print(apps.columns)
 st.code("""print(apps.columns)""")
 
 st.code("""
