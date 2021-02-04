@@ -326,6 +326,16 @@ st.markdown("""
 ### Drop unnecessary columns
 """)
 
+# Specify the cols to drop
+to_drop = [
+    'app_id', 'minimum_android',
+    'developer_id', 'developer_website', 'developer_email', 'privacy_policy',
+    'ad_supported', 'in_app_purchases', 'editors_choice'
+]
+
+# Drop them
+apps.drop(to_drop, axis='columns', inplace=True)
+
 st.code("""
     # Specify the cols to drop
     to_drop = [
@@ -338,15 +348,6 @@ st.code("""
     apps.drop(to_drop, axis='columns', inplace=True)
 """)
 
-# Specify the cols to drop
-to_drop = [
-    'app_id', 'minimum_android',
-    'developer_id', 'developer_website', 'developer_email', 'privacy_policy',
-    'ad_supported', 'in_app_purchases', 'editors_choice'
-]
-
-# Drop them
-# apps.drop(to_drop, axis='columns', inplace=True)
 
 st.markdown("""Check:""")
 
