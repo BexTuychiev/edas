@@ -4,7 +4,7 @@ from PIL import Image
 st.markdown("""# My 5-part Powerful EDA Template That Speaks of Ultimate Skill
 ## It is hard to stand out guys...""")
 
-image = Image.open('images/texture.jpg')
+image = Image.open('./images/texture.jpg')
 
 st.image(image, use_column_width=True)
 
